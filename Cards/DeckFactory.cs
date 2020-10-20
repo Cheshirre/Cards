@@ -18,13 +18,28 @@ namespace Cards
 
             for (var i = 0; i < size; i++)
             {
-                deck.Cards.Add(new Card { Name = $"card {i}", Value = i });
-                //to-do: здесь вместо прямого добавления можно было бы использовать какой-нибудь GetNextCard
+                if (i == 0)
+                    deck.Cards.Add(new Card { Name = $"card {i}", Value = i, Suit = Suit.Clubs, Weight = Weight.Two });
+                else
+                    deck.Cards.Add(GetNextCard(i, $"card {i}", deck.Cards.Last()));
             }
 
             deck.Cards.OrderBy(x => x.Value);
 
             return deck;
+        }
+
+        private Card GetNextCard(int i, string name, Card lastCard)
+        {
+            Card card = new Card
+            { 
+                Name = name, 
+                Value = i, 
+                Suit = lastCard.Weight != Weight.Ace ? lastCard.Suit : lastCard.Suit++, 
+                Weight = lastCard.Weight != Weight.Ace ? lastCard.Weight++ : Weight.Two
+            };
+
+            return card;
         }
     }
 }
